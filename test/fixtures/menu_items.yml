@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  menu_category: one
+  name: MyString
+  description: MyText
+  price_cents: 1
+  allergens: 
+  image_url: MyString
+  is_active: false
+  upsell_targets: 
+
+two:
+  menu_category: two
+  name: MyString
+  description: MyText
+  price_cents: 1
+  allergens: 
+  image_url: MyString
+  is_active: false
+  upsell_targets: 

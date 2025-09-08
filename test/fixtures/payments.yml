@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  order: one
+  stripe_payment_intent: MyString
+  amount_cents: 1
+  status: MyString
+
+two:
+  order: two
+  stripe_payment_intent: MyString
+  amount_cents: 1
+  status: MyString

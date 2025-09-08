@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  restaurant: one
+  table: one
+  status: MyString
+  subtotal_cents: 1
+  vat_cents: 1
+  total_cents: 1
+  paid_cents: 1
+
+two:
+  restaurant: two
+  table: two
+  status: MyString
+  subtotal_cents: 1
+  vat_cents: 1
+  total_cents: 1
+  paid_cents: 1

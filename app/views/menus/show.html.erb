@@ -1,0 +1,13 @@
+<h2><%= @restaurant.name %> – Tisch <%= @table.code %></h2>
+<% @categories.each do |cat| %>
+  <h3><%= cat.name %></h3>
+  <ul>
+    <% cat.menu_items.where(is_active: true).each do |i| %>
+      <li>
+        <strong><%= i.name %></strong>
+        – €<%= (i.price_cents.to_i / 100.0).round(2) %>
+        <%= button_to "Add", "#", form: { data: { action: "click->cart#add", item_id: i.id } } %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

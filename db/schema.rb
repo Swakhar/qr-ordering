@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_02_224321) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_08_110258) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -103,4 +103,94 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_02_224321) do
     t.index ["queue_name", "scheduled_at"], name: "index_good_jobs_on_queue_name_and_scheduled_at", where: "(finished_at IS NULL)"
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
+
+  create_table "menu_categories", force: :cascade do |t|
+    t.bigint "restaurant_id", null: false
+    t.string "name"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["restaurant_id"], name: "index_menu_categories_on_restaurant_id"
+  end
+
+  create_table "menu_items", force: :cascade do |t|
+    t.bigint "menu_category_id", null: false
+    t.string "name"
+    t.text "description"
+    t.integer "price_cents"
+    t.jsonb "allergens"
+    t.string "image_url"
+    t.boolean "is_active"
+    t.jsonb "upsell_targets"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["menu_category_id"], name: "index_menu_items_on_menu_category_id"
+  end
+
+  create_table "order_items", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "menu_item_id", null: false
+    t.string "name_snapshot"
+    t.integer "price_cents"
+    t.integer "qty"
+    t.string "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["menu_item_id"], name: "index_order_items_on_menu_item_id"
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.bigint "restaurant_id", null: false
+    t.bigint "table_id", null: false
+    t.string "status"
+    t.integer "subtotal_cents"
+    t.integer "vat_cents"
+    t.integer "total_cents"
+    t.integer "paid_cents"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["restaurant_id"], name: "index_orders_on_restaurant_id"
+    t.index ["table_id"], name: "index_orders_on_table_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.string "stripe_payment_intent"
+    t.integer "amount_cents"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_payments_on_order_id"
+    t.index ["stripe_payment_intent"], name: "index_payments_on_stripe_payment_intent", unique: true
+  end
+
+  create_table "restaurants", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.string "currency"
+    t.decimal "vat_rate", precision: 4, scale: 2
+    t.string "address"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_restaurants_on_slug", unique: true
+  end
+
+  create_table "tables", force: :cascade do |t|
+    t.bigint "restaurant_id", null: false
+    t.string "code"
+    t.string "label"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["restaurant_id"], name: "index_tables_on_restaurant_id"
+  end
+
+  add_foreign_key "menu_categories", "restaurants"
+  add_foreign_key "menu_items", "menu_categories"
+  add_foreign_key "order_items", "menu_items"
+  add_foreign_key "order_items", "orders"
+  add_foreign_key "orders", "restaurants"
+  add_foreign_key "orders", "tables"
+  add_foreign_key "payments", "orders"
+  add_foreign_key "tables", "restaurants"
 end
