@@ -3,7 +3,7 @@ source "https://rubygems.org"
 ruby "3.3.4" # or your latest installed Ruby 3.3.x
 
 # Core Rails
-gem "rails", "~> 8.0.2", ">= 8.0.2.1"
+gem "rails", "~> 8.1.0"
 gem "puma", ">= 5.0"
 gem "propshaft"              # Rails 8 asset pipeline
 
