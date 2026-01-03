@@ -1,0 +1,32 @@
+de:
+  menu:
+    title: "Speisekarte"
+    table: "Tisch"
+    cart: "Warenkorb"
+    cart_empty: "Ihr Warenkorb ist leer"
+    total: "Summe"
+    order_now: "Jetzt bestellen"
+    add_to_cart: "In den Warenkorb"
+    quantity: "Menge"
+    allergens: "Allergene"
+    upsell_title: "Empfehlungen"
+    upsell_subtitle: "Dazu passt auch"
+    item_added: "Artikel hinzugefügt"
+    order_success: "Bestellung erfolgreich aufgegeben!"
+    
+  allergens:
+    gluten: "Gluten"
+    dairy: "Milchprodukte"
+    eggs: "Eier"
+    fish: "Fisch"
+    nuts: "Nüsse"
+    soy: "Soja"
+    shellfish: "Schalentiere"
+    sesame: "Sesam"
+    
+  categories:
+    appetizers: "Vorspeisen"
+    mains: "Hauptgerichte"
+    sides: "Beilagen"
+    drinks: "Getränke"
+    desserts: "Nachspeisen"

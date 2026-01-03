@@ -29,3 +29,35 @@
 
 en:
   hello: "Hello world"
+  
+  menu:
+    title: "Menu"
+    table: "Table"
+    cart: "Cart"
+    cart_empty: "Your cart is empty"
+    total: "Total"
+    order_now: "Order now"
+    add_to_cart: "Add to cart"
+    quantity: "Quantity"
+    allergens: "Allergens"
+    upsell_title: "Recommendations"
+    upsell_subtitle: "You might also like"
+    item_added: "Item added"
+    order_success: "Order placed successfully!"
+    
+  allergens:
+    gluten: "Gluten"
+    dairy: "Dairy"
+    eggs: "Eggs"
+    fish: "Fish"
+    nuts: "Nuts"
+    soy: "Soy"
+    shellfish: "Shellfish"
+    sesame: "Sesame"
+    
+  categories:
+    appetizers: "Appetizers"
+    mains: "Main Courses"
+    sides: "Sides"
+    drinks: "Beverages"
+    desserts: "Desserts"

@@ -1,0 +1,32 @@
+it:
+  menu:
+    title: "Menu"
+    table: "Tavolo"
+    cart: "Carrello"
+    cart_empty: "Il tuo carrello è vuoto"
+    total: "Totale"
+    order_now: "Ordina ora"
+    add_to_cart: "Aggiungi al carrello"
+    quantity: "Quantità"
+    allergens: "Allergeni"
+    upsell_title: "Raccomandazioni"
+    upsell_subtitle: "Ti potrebbero piacere anche"
+    item_added: "Articolo aggiunto"
+    order_success: "Ordine effettuato con successo!"
+    
+  allergens:
+    gluten: "Glutine"
+    dairy: "Latticini"
+    eggs: "Uova"
+    fish: "Pesce"
+    nuts: "Noci"
+    soy: "Soia"
+    shellfish: "Crostacei"
+    sesame: "Sesamo"
+    
+  categories:
+    appetizers: "Antipasti"
+    mains: "Piatti principali"
+    sides: "Contorni"
+    drinks: "Bevande"
+    desserts: "Dolci"

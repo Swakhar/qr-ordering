@@ -35,6 +35,7 @@ gem "pgvector"               # Vector extension for Postgres
 # Utilities
 gem "rack-cors"              # CORS (if you serve API endpoints to mobile/tablets)
 gem "bootsnap", require: false
+gem "dotenv-rails", groups: [:development, :test] # Load .env variables
 
 gem "devise"           # staff auth
 gem "rails_admin"      # quick admin panel

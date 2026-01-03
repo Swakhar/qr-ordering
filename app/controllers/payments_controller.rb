@@ -3,7 +3,7 @@ class PaymentsController < ApplicationController
 
   def show
     @order = Order.find(params[:id])
-    @publishable_key = Rails.application.credentials.dig(:stripe, :publishable_key)
+    @publishable_key = ENV['STRIPE_PUBLISHABLE_KEY']
     @restaurant_slug = params[:r]
   end
 
@@ -12,7 +12,7 @@ class PaymentsController < ApplicationController
     amount = (params[:amount_cents] || (order.total_cents - order.paid_cents)).to_i
     return render json: { error: "Invalid amount" }, status: 400 if amount <= 0
 
-    Stripe.api_key = Rails.application.credentials.dig(:stripe, :secret_key)
+    Stripe.api_key = ENV['STRIPE_SECRET_KEY']
     intent = Stripe::PaymentIntent.create(
       amount: amount,
       currency: order.restaurant.currency.downcase,
@@ -26,7 +26,7 @@ class PaymentsController < ApplicationController
   def webhook
     payload = request.raw_post
     sig = request.env["HTTP_STRIPE_SIGNATURE"]
-    secret = Rails.application.credentials.dig(:stripe, :webhook_secret)
+    secret = ENV['STRIPE_WEBHOOK_SECRET']
     event = Stripe::Webhook.construct_event(payload, sig, secret)
 
     if %w[payment_intent.succeeded payment_intent.payment_failed payment_intent.canceled].include?(event["type"])

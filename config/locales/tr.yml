@@ -1,0 +1,32 @@
+tr:
+  menu:
+    title: "Menü"
+    table: "Masa"
+    cart: "Sepet"
+    cart_empty: "Sepetiniz boş"
+    total: "Toplam"
+    order_now: "Şimdi sipariş ver"
+    add_to_cart: "Sepete ekle"
+    quantity: "Miktar"
+    allergens: "Alerjenler"
+    upsell_title: "Öneriler"
+    upsell_subtitle: "Bunlar da hoşunuza gidebilir"
+    item_added: "Ürün eklendi"
+    order_success: "Sipariş başarıyla oluşturuldu!"
+    
+  allergens:
+    gluten: "Gluten"
+    dairy: "Süt ürünleri"
+    eggs: "Yumurta"
+    fish: "Balık"
+    nuts: "Fındık"
+    soy: "Soya"
+    shellfish: "Kabuklu deniz ürünleri"
+    sesame: "Susam"
+    
+  categories:
+    appetizers: "Mezeler"
+    mains: "Ana yemekler"
+    sides: "Yan yemekler"
+    drinks: "İçecekler"
+    desserts: "Tatlılar"
