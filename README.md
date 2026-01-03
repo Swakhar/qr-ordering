@@ -143,7 +143,7 @@ db/
 - [x] Step 1: Model associations and validations
 - [x] Step 2: Seed data with German restaurant menu
 - [x] Step 3: Customer QR menu view
-- [ ] Step 4: AI upsell suggestions
+- [x] Step 4: AI upsell suggestions (rule-based)
 - [ ] Step 5: Payment splitting
 - [ ] Step 6: Kitchen display with Turbo Streams
 - [ ] Step 7: Admin dashboard enhancements

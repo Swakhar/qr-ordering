@@ -1,5 +1,6 @@
 class MenusController < ApplicationController
   before_action :set_locale
+  skip_before_action :verify_authenticity_token, only: [:upsell]
   
   def show
     @restaurant = Restaurant.find_by!(slug: params[:restaurant_slug])

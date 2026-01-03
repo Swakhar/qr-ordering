@@ -40,8 +40,8 @@ en:
     add_to_cart: "Add to cart"
     quantity: "Quantity"
     allergens: "Allergens"
-    upsell_title: "Recommendations"
-    upsell_subtitle: "You might also like"
+    upsell_title: "You might also like"
+    upsell_subtitle: "Complete your meal"
     item_added: "Item added"
     order_success: "Order placed successfully!"
     

@@ -6,6 +6,11 @@ export default class extends Controller {
   connect() {
     this.lines = {}
     this.render()
+    
+    // Listen for upsell additions
+    document.addEventListener("upsell:add", (event) => {
+      this.add({ preventDefault: () => {}, params: { itemId: event.detail.itemId } })
+    })
   }
 
   add(event) {
@@ -19,6 +24,9 @@ export default class extends Controller {
     if ('vibrate' in navigator) {
       navigator.vibrate(50)
     }
+    
+    // Dispatch cart updated event for upsells
+    this.dispatchCartUpdate()
   }
 
   remove(event) {
@@ -28,6 +36,7 @@ export default class extends Controller {
     this.lines[id]--
     if (this.lines[id] <= 0) delete this.lines[id]
     this.render()
+    this.dispatchCartUpdate()
   }
 
   increment(event) {
@@ -36,6 +45,7 @@ export default class extends Controller {
     if (!this.lines[id]) return
     this.lines[id]++
     this.render()
+    this.dispatchCartUpdate()
   }
 
   deleteItem(event) {
@@ -43,6 +53,7 @@ export default class extends Controller {
     const id = parseInt(event.params.itemId, 10)
     delete this.lines[id]
     this.render()
+    this.dispatchCartUpdate()
   }
 
   toggleCart(event) {
@@ -184,5 +195,13 @@ export default class extends Controller {
       'cart_empty': 'Your cart is empty'
     }
     return translations[key] || key
+  }
+
+  dispatchCartUpdate() {
+    const itemIds = Object.keys(this.lines).map(id => parseInt(id, 10))
+    const event = new CustomEvent("cart:updated", {
+      detail: { itemIds }
+    })
+    document.dispatchEvent(event)
   }
 }

@@ -1,42 +1,58 @@
 class Upsell
-  # Given a list of item_ids in cart, return 3 suggestions
+  # Given a list of item_ids in cart, return up to 3 suggestions using rule-based logic
   def self.for_cart(item_ids, restaurant:)
-    base = MenuItem.active.where(id: item_ids).pluck(:id, :name, :description)
-    # 1) Vector similarity against all items in the same restaurant
-    query = base.map { |(_,n,d)| "#{n}. #{d}" }.join(" & ")
-    vec = embed(query)
-    vector_matches = MenuItem.joins(menu_category: :restaurant)
+    return [] if item_ids.blank?
+    
+    cart_items = MenuItem.active.where(id: item_ids).includes(:menu_category)
+    cart_category_names = cart_items.map { |i| i.menu_category.name.downcase }.uniq
+    
+    # Rule-based logic: suggest complementary items
+    suggestions = []
+    
+    # Rule 1: If cart has mains but no drinks, suggest drinks
+    if has_category?(cart_category_names, ['main', 'entrée', 'entree', 'hauptspeise']) && 
+       !has_category?(cart_category_names, ['drink', 'beverage', 'getränke', 'getranke'])
+      suggestions += get_items_from_categories(restaurant, ['drink', 'beverage', 'getränke', 'getranke'], exclude_ids: item_ids)
+    end
+    
+    # Rule 2: If cart has mains but no sides, suggest sides
+    if has_category?(cart_category_names, ['main', 'entrée', 'entree', 'hauptspeise']) && 
+       !has_category?(cart_category_names, ['side', 'beilage', 'beilagen'])
+      suggestions += get_items_from_categories(restaurant, ['side', 'beilage', 'beilagen'], exclude_ids: item_ids)
+    end
+    
+    # Rule 3: If cart has food but no dessert, suggest desserts
+    if (has_category?(cart_category_names, ['main', 'appetizer', 'starter', 'hauptspeise', 'vorspeise']) || suggestions.any?) && 
+       !has_category?(cart_category_names, ['dessert', 'sweet', 'nachspeise', 'nachtisch'])
+      suggestions += get_items_from_categories(restaurant, ['dessert', 'sweet', 'nachspeise', 'nachtisch'], exclude_ids: item_ids)
+    end
+    
+    # Rule 4: Use item-specific upsell targets
+    cart_items.each do |item|
+      if item.upsell_targets.present? && item.upsell_targets.is_a?(Array)
+        item.upsell_targets.each do |target|
+          suggestions += get_items_from_categories(restaurant, [target], exclude_ids: item_ids)
+        end
+      end
+    end
+    
+    # Return unique suggestions, limit to 3, prioritize by price (higher first)
+    suggestions.uniq.sort_by(&:price_cents).reverse.take(3)
+  end
+
+  private
+
+  def self.has_category?(category_names, keywords)
+    category_names.any? { |cat| keywords.any? { |kw| cat.include?(kw) } }
+  end
+
+  def self.get_items_from_categories(restaurant, keywords, exclude_ids:)
+    MenuItem.joins(:menu_category)
       .where(menu_categories: { restaurant_id: restaurant.id })
-      .where.not(id: item_ids)
-      .order(Arel.sql("embedding <-> '#{vector_literal(vec)}'"))
-      .limit(8)
-    # 2) LLM rerank simple (names only) — optional to keep cheap
-    reranked = rerank_llm(base, vector_matches)
-    reranked.take(3)
-  end
-
-  def self.embed(text)
-    client = OpenAI::Client.new(access_token: Rails.application.credentials.dig(:openai, :api_key))
-    resp = client.embeddings(parameters: { model: "text-embedding-3-small", input: text })
-    resp["data"][0]["embedding"]
-  end
-
-  def self.vector_literal(arr) = "[" + arr.map { |x| format("%.6f", x) }.join(",") + "]"
-
-  def self.rerank_llm(cart, candidates)
-    client = OpenAI::Client.new(access_token: Rails.application.credentials.dig(:openai, :api_key))
-    cart_names = cart.map { |(_,n,_)| n }
-    cand_lines = candidates.map { |c| "#{c.id}:: #{c.name}" }.join("\n")
-    prompt = <<~TXT
-      A guest ordered: #{cart_names.join(", ")}.
-      From the following candidates, pick the BEST 3 complementary upsells (IDs only), focusing on sides/drinks/desserts:
-      #{cand_lines}
-      Answer as a comma-separated list of IDs only.
-    TXT
-    r = client.chat(parameters: { model: "gpt-4o-mini", messages: [{ role: "user", content: prompt }] })
-    ids = r.dig("choices",0,"message","content").to_s.scan(/\d+/).map(&:to_i)
-    candidates.select { |c| ids.include?(c.id) } + (candidates - candidates.select { |c| ids.include?(c.id) })
-  rescue
-    candidates
+      .where("LOWER(menu_categories.name) LIKE ANY (ARRAY[?])", keywords.map { |k| "%#{k}%" })
+      .where(is_active: true)
+      .where.not(id: exclude_ids)
+      .limit(3)
+      .to_a
   end
 end
