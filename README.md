@@ -144,8 +144,8 @@ db/
 - [x] Step 2: Seed data with German restaurant menu
 - [x] Step 3: Customer QR menu view
 - [x] Step 4: AI upsell suggestions (rule-based)
-- [ ] Step 5: Payment splitting
-- [ ] Step 6: Kitchen display with Turbo Streams
+- [x] Step 5: Payment splitting
+- [x] Step 6: Kitchen display with Turbo Streams
 - [ ] Step 7: Admin dashboard enhancements
 - [ ] Step 8: i18n implementation (DE, EN, TR, IT)
 - [ ] Step 9: QR code generation

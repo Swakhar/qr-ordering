@@ -21,8 +21,21 @@
   }
 }
 
+@keyframes pulse-once {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
 .animate-fade-in {
   animation: fade-in 0.3s ease-out;
+}
+
+.animate-pulse-once {
+  animation: pulse-once 1s ease-in-out 2;
 }
 
 /* Smooth transitions */

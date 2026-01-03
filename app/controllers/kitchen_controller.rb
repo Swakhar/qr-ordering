@@ -9,9 +9,14 @@ class KitchenController < ApplicationController
   def update
     order = Order.find(params[:id])
     order.update!(status: params[:status])
+    
+    # Reload order with associations for rendering
+    order = Order.includes(:order_items, :table, :restaurant).find(order.id)
+    
+    # Render turbo_stream response for the clicker
     render turbo_stream: turbo_stream.replace(
       helpers.dom_id(order),
-      partial: "kitchen/order",
+      partial: "orders/order",
       locals: { order: order }
     )
   end
