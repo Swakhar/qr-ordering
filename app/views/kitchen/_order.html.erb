@@ -1,0 +1,15 @@
+<div id="<%= dom_id(order) %>" style="border:1px solid #ddd; border-radius:8px; padding:10px; margin:10px 0;">
+  <div><strong>Bestellung #<%= order.id %></strong> – <%= order.status %> – <%= l(order.created_at, format: :short) %></div>
+  <ul>
+    <% order.order_items.each do |i| %>
+      <li><%= i.qty %>× <%= i.name_snapshot %></li>
+    <% end %>
+  </ul>
+
+  <% if staff_signed_in? %>
+    <%= button_to "Markiere vorbereitet", order_status_path(order, status: "prepared"),
+          method: :patch, data: { turbo_stream: true } %>
+    <%= button_to "Markiere serviert", order_status_path(order, status: "served"),
+          method: :patch, data: { turbo_stream: true } %>
+  <% end %>
+</div>

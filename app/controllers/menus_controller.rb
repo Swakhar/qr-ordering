@@ -4,4 +4,11 @@ class MenusController < ApplicationController
     @table = @restaurant.tables.find_by!(code: params[:table_code])
     @categories = @restaurant.menu_categories.includes(:menu_items).order(:position)
   end
+
+  def upsell
+    restaurant = Restaurant.find_by!(slug: params[:restaurant_slug])
+    item_ids = Array(params[:item_ids]).map(&:to_i)
+    items = Upsell.for_cart(item_ids, restaurant: restaurant)
+    render json: items.map { |i| { id: i.id, name: i.name, price_cents: i.price_cents, image_url: i.image_url } }
+  end
 end

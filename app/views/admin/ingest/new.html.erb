@@ -1,0 +1,16 @@
+<h2>AI Menü-Import</h2>
+<%= form_with url: admin_ingest_index_path, method: :post do |f| %>
+  <div>
+    <label>Restaurant</label>
+    <%= select_tag :restaurant_id, options_from_collection_for_select(Restaurant.all, :id, :name) %>
+  </div>
+  <div>
+    <label>Kategorie (optional)</label>
+    <%= text_field_tag :category %>
+  </div>
+  <div>
+    <label>Rohtext (einfügen)</label><br>
+    <%= text_area_tag :raw, "", rows: 12, style: "width:100%;" %>
+  </div>
+  <%= submit_tag "Import starten" %>
+<% end %>

@@ -1,13 +1,33 @@
-<h2><%= @restaurant.name %> – Tisch <%= @table.code %></h2>
-<% @categories.each do |cat| %>
-  <h3><%= cat.name %></h3>
-  <ul>
-    <% cat.menu_items.where(is_active: true).each do |i| %>
-      <li>
-        <strong><%= i.name %></strong>
-        – €<%= (i.price_cents.to_i / 100.0).round(2) %>
-        <%= button_to "Add", "#", form: { data: { action: "click->cart#add", item_id: i.id } } %>
-      </li>
+<%= turbo_stream_from "kitchen:#{@restaurant.slug}" %>
+
+<div data-controller="cart">
+  <header>
+    <h2><%= @restaurant.name %> – Tisch <%= @table.code %></h2>
+  </header>
+
+  <% @categories.each do |cat| %>
+    <h3><%= cat.name %></h3>
+    <div>
+      <% cat.menu_items.where(is_active: true).each do |i| %>
+        <div style="display:flex; gap:8px; align-items:center; border-bottom:1px solid #eee; padding:6px 0;">
+          <div data-item-name="<%= i.id %>" data-name="<%= i.name %>"><strong><%= i.name %></strong></div>
+          <small><%= number_to_currency(i.price_cents/100.0, unit: "€") %></small>
+          <span data-item-price="<%= i.id %>" data-cents="<%= i.price_cents %>"></span>
+          <button data-action="click->cart#add" data-cart-item-id-param="<%= i.id %>">In den Warenkorb</button>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <hr>
+  <div>
+    <h4>Warenkorb</h4>
+    <div data-cart-target="lines"><em>Leer</em></div>
+    <div>Summe: <strong data-cart-target="total">€0,00</strong></div>
+
+    <%= form_with url: create_order_path(@restaurant.slug, @table.code), method: :post, data: { turbo: true } do |f| %>
+      <%= hidden_field_tag :items_json, "", data: { cart_target: "payload" } %>
+      <%= submit_tag "Bestellen", data: { action: "click->cart#checkout" } %>
     <% end %>
-  </ul>
-<% end %>
+  </div>
+</div>

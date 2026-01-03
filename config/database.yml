@@ -5,12 +5,12 @@ default: &default
 
 development:
   <<: *default
-  url: <%= ENV["DATABASE_URL"] %>
+  url: <%= ENV["QR_ORDERING_DATABASE_URL"] %>
 
 test:
   <<: *default
-  url: <%= ENV["TEST_DATABASE_URL"] || ENV["DATABASE_URL"].sub("app_development", "app_test") %>
+  url: <%= ENV["QR_ORDERING_TEST_DATABASE_URL"] || ENV["QR_ORDERING_DATABASE_URL"].sub("app_development", "app_test") %>
 
 production:
   <<: *default
-  url: <%= ENV["DATABASE_URL"] %>
+  url: <%= ENV["QR_ORDERING_DATABASE_URL"] %>

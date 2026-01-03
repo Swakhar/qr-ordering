@@ -16,6 +16,7 @@ gem "importmap-rails"
 gem "turbo-rails"
 gem "stimulus-rails"
 gem "tailwindcss-rails"
+gem "dartsass-rails"         # SCSS compilation for Rails Admin
 
 # Background jobs / real-time
 gem "good_job"               # Postgres-backed jobs + scheduler
@@ -34,6 +35,10 @@ gem "pgvector"               # Vector extension for Postgres
 # Utilities
 gem "rack-cors"              # CORS (if you serve API endpoints to mobile/tablets)
 gem "bootsnap", require: false
+
+gem "devise"           # staff auth
+gem "rails_admin"      # quick admin panel
+
 
 # Deployment (optional)
 # gem "kamal", require: false

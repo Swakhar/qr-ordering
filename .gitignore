@@ -21,6 +21,17 @@
 
 # Ignore all environment files.
 /env*
+.env
+.env.*
+!.env.example
+
+# Node modules and package manager files
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -47,3 +58,22 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+!/app/assets/builds/rails_admin.css
+
+# IDE and Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# Testing
+/coverage/
+
+# Database files (development/test)
+*.sqlite3
+*.sqlite3-journal
+*.sqlite3-shm
+*.sqlite3-wal

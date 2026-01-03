@@ -1,4 +1,6 @@
-<div>
-  <h1 class="font-bold text-4xl">Kitchen#index</h1>
-  <p>Find me in app/views/kitchen/index.html.erb</p>
+<%= turbo_stream_from "kitchen:#{@restaurant.slug}" %>
+<h2>Küche – <%= @restaurant.name %></h2>
+
+<div id="orders">
+  <%= render @orders %>
 </div>

@@ -5,3 +5,11 @@ Rails.application.config.assets.version = "1.0"
 
 # Add additional assets to the asset load path.
 # Rails.application.config.assets.paths << Emoji.images_path
+Rails.application.config.assets.paths << Rails.root.join("node_modules")
+
+# Add Rails Admin gem assets
+rails_admin_path = Gem.loaded_specs['rails_admin']&.full_gem_path
+if rails_admin_path
+  Rails.application.config.assets.paths << File.join(rails_admin_path, 'app', 'assets', 'stylesheets')
+  Rails.application.config.assets.paths << File.join(rails_admin_path, 'app', 'assets', 'javascripts')
+end

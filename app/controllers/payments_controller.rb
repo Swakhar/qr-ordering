@@ -1,20 +1,26 @@
 class PaymentsController < ApplicationController
   protect_from_forgery except: :webhook
 
+  def show
+    @order = Order.find(params[:id])
+    @publishable_key = Rails.application.credentials.dig(:stripe, :publishable_key)
+    @restaurant_slug = params[:r]
+  end
+
   def create_intent
     order = Order.find_by!(id: params[:id], restaurant: Restaurant.find_by!(slug: params[:restaurant_slug]))
-    amount = (params[:amount_cents] || order.total_cents - order.paid_cents).to_i
-    return render json: { error: "Invalid amount" }, status: 400 if amount <= 0 || amount > (order.total_cents - order.paid_cents)
+    amount = (params[:amount_cents] || (order.total_cents - order.paid_cents)).to_i
+    return render json: { error: "Invalid amount" }, status: 400 if amount <= 0
 
     Stripe.api_key = Rails.application.credentials.dig(:stripe, :secret_key)
     intent = Stripe::PaymentIntent.create(
       amount: amount,
-      currency: (order.restaurant.currency || "EUR").downcase,
+      currency: order.restaurant.currency.downcase,
       automatic_payment_methods: { enabled: true },
       metadata: { order_id: order.id, restaurant: order.restaurant.slug }
     )
     Payment.create!(order:, stripe_payment_intent: intent.id, amount_cents: amount, status: intent.status)
-    render json: { client_secret: intent.client_secret, payment_intent: intent.id }
+    render json: { client_secret: intent.client_secret }
   end
 
   def webhook
@@ -29,10 +35,9 @@ class PaymentsController < ApplicationController
         p.update!(status: pi["status"])
         if pi["status"] == "succeeded"
           o = p.order
-          new_paid = [o.total_cents, o.paid_cents + p.amount_cents].min
-          new_status = (new_paid >= o.total_cents) ? "paid" : o.status
-          o.update!(paid_cents: new_paid, status: new_status)
-          # Broadcast to kitchen via Turbo Streams if you like
+          o.update!(paid_cents: [o.total_cents, o.paid_cents + p.amount_cents].min,
+                    status: (o.paid_cents + p.amount_cents >= o.total_cents ? "paid" : o.status))
+          KitchenBroadcastJob.perform_later(o.id)
         end
       end
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_08_110258) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_02_095108) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -104,6 +104,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_08_110258) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
+  create_table "jobs", id: { type: :string, limit: 255 }, force: :cascade do |t|
+    t.jsonb "data", null: false
+    t.datetime "created_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }
+    t.datetime "updated_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }
+    t.index ["updated_at"], name: "idx_jobs_updated_at"
+  end
+
   create_table "menu_categories", force: :cascade do |t|
     t.bigint "restaurant_id", null: false
     t.string "name"
@@ -174,6 +181,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_08_110258) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_restaurants_on_slug", unique: true
+  end
+
+  create_table "staffs", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "admin"
+    t.index ["email"], name: "index_staffs_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_staffs_on_reset_password_token", unique: true
   end
 
   create_table "tables", force: :cascade do |t|

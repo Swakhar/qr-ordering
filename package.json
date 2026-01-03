@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@hotwired/turbo-rails": "^8.0.16"
+    "@hotwired/turbo-rails": "^8.0.16",
+    "rails_admin": "3.3.0"
   }
 }

@@ -1,0 +1,32 @@
+<%# include Stripe.js %>
+<script src="https://js.stripe.com/v3/"></script>
+
+<h2>Zahlung für Bestellung #<%= @order.id %></h2>
+<p>Gesamt: <%= number_to_currency(@order.total_cents/100.0, unit: "€") %></p>
+
+<div id="payment-element"></div>
+<button id="pay-button">Jetzt bezahlen</button>
+
+<script type="module">
+  const stripe = Stripe("<%= @publishable_key %>")
+  const orderId = "<%= @order.id %>"
+  const restaurant = "<%= @restaurant_slug || @order.restaurant.slug %>"
+
+  async function init() {
+    const res = await fetch(`/r/${restaurant}/orders/${orderId}/payment_intent`, { method: "POST" })
+    const { client_secret } = await res.json()
+
+    const elements = stripe.elements({ clientSecret: client_secret })
+    const paymentElement = elements.create("payment")
+    paymentElement.mount("#payment-element")
+
+    document.getElementById("pay-button").addEventListener("click", async () => {
+      const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: { return_url: `${window.location.origin}/kitchen/${restaurant}` }
+      })
+      if (error) alert(error.message)
+    })
+  }
+  init()
+</script>
