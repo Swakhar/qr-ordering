@@ -69,19 +69,23 @@ rails db:seed
 
 ### 4. Environment Variables
 
-Create a `.env` file in the root directory (optional for development):
+Create a `.env` file in the root directory:
 
 ```bash
 # Database (if not using default)
 DATABASE_URL=postgresql://localhost:5433/app_development
 
 # Stripe (for payment processing)
-STRIPE_PUBLISHABLE_KEY=your_key_here
-STRIPE_SECRET_KEY=your_secret_here
+# Get your test keys from: https://dashboard.stripe.com/test/apikeys
+STRIPE_PUBLISHABLE_KEY=pk_test_your_key_here
+STRIPE_SECRET_KEY=sk_test_your_key_here
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret_here
 
 # Application
 RAILS_ENV=development
 ```
+
+**📘 For complete Stripe setup instructions, see [docs/STRIPE_SETUP.md](docs/STRIPE_SETUP.md)**
 
 ### 5. Start the Development Server
 
@@ -158,6 +162,26 @@ WebSocket-powered live updates:
 - Works for authenticated and unauthenticated users
 - Turbo Streams for instant UI updates
 
+### Stripe Payment Integration
+Secure payment processing with split payment support:
+- Multiple payment methods via Stripe
+- Split payments for group orders
+- Real-time webhook processing
+- Automatic order status updates
+- Test mode for development
+- **Setup Guide:** [docs/STRIPE_SETUP.md](docs/STRIPE_SETUP.md)
+
+**Quick Start:**
+```bash
+# Set your Stripe test keys in .env
+STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# Test locally with Stripe CLI
+stripe listen --forward-to localhost:3007/stripe/webhook
+```
+
 ## Project Structure
 
 ```
@@ -189,9 +213,52 @@ db/
 - [x] Step 7: Admin dashboard enhancements
 - [x] Step 8: i18n implementation (DE, EN, TR, IT)
 - [x] Step 9: QR code generation
-- [ ] Step 10: Stripe configuration
-- [ ] Step 11: Analytics dashboard
-- [ ] Step 12: UI/UX polish
+- [x] Step 10: Stripe configuration
+- [x] Step 11: Analytics dashboard
+- [x] Step 12: UI/UX polish
+
+## UI/UX Enhancements
+
+The application features a modern, polished user interface with:
+
+### Visual Design
+- **Gradient Backgrounds**: Beautiful gradients with animated blob effects
+- **Glass Morphism**: Modern frosted glass design elements
+- **Smooth Animations**: Fade-in, slide, scale, and custom effects
+- **Hover Effects**: Interactive feedback on all clickable elements
+- **Responsive Design**: Optimized for mobile, tablet, and desktop
+- **Modern Typography**: Clean, readable font hierarchy
+
+### Animations & Effects
+- **15+ Custom Animations**: Including fade, slide, pulse, bounce, blob
+- **Staggered Entrance**: Elements animate in sequence
+- **Loading States**: Shimmer effects and spinners
+- **Toast Notifications**: Slide-in success messages
+- **Ripple Effects**: Material Design-inspired interactions
+- **Glow Effects**: Subtle shadows and highlights
+
+### Components
+- **Modern Cards**: Shadow elevations with hover effects
+- **Gradient Buttons**: Eye-catching CTAs with scale animations
+- **Status Badges**: Color-coded with proper semantics
+- **Glass Cards**: Backdrop blur for premium feel
+- **Custom Scrollbars**: Styled for consistent experience
+
+### Accessibility
+- **WCAG AA Compliant**: Proper color contrast ratios
+- **Keyboard Navigation**: Full keyboard support
+- **Focus Indicators**: Visible focus rings on all interactive elements
+- **Semantic HTML**: Proper heading hierarchy and ARIA labels
+- **Screen Reader Friendly**: Descriptive alt text and labels
+
+### Performance
+- **System Fonts**: No web font loading delay
+- **CSS Animations**: Hardware-accelerated transforms
+- **Lazy Loading**: Images load on demand
+- **Optimized Assets**: Minimal CSS/JS footprint
+- **60fps Animations**: Smooth on all modern devices
+
+For complete UI/UX documentation, see [docs/UI_UX_GUIDE.md](docs/UI_UX_GUIDE.md)
 
 ## Running Tests
 

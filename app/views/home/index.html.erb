@@ -1,2 +1,270 @@
-<h1>QR Ordering MVP</h1>
-<p>Set up your first restaurant in /rails console or /admin later.</p>
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+  <!-- Hero Section -->
+  <div class="relative overflow-hidden">
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+      <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+      <div class="absolute top-1/2 left-1/2 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+      <div class="text-center">
+        <!-- Logo/Brand -->
+        <div class="flex justify-center mb-8">
+          <div class="inline-flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-lg rounded-full border border-white/20">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+            </svg>
+            <span class="text-white font-semibold">QR Ordering System</span>
+          </div>
+        </div>
+
+        <!-- Main Heading -->
+        <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 animate-fade-in-up">
+          Modern Restaurant
+          <span class="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mt-2">
+            Ordering Made Simple
+          </span>
+        </h1>
+
+        <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-12 animate-fade-in-up animation-delay-200">
+          Transform your dining experience with QR code ordering, real-time kitchen updates, and seamless payment splitting.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up animation-delay-400">
+          <%= link_to rails_admin_path, class: "group relative inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-xl overflow-hidden transition-all hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/50" do %>
+            <span class="relative z-10">Admin Dashboard</span>
+            <svg class="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+            <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <% end %>
+
+          <%= link_to menu_path('gasthaus-bavaria', 'TBL001'), class: "inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-lg text-white font-semibold rounded-xl border-2 border-white/20 hover:bg-white/20 transition-all hover:scale-105" do %>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+            </svg>
+            View Demo Menu
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="relative bg-white py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Powerful Features</h2>
+        <p class="text-xl text-gray-600">Everything you need for modern restaurant operations</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Feature 1: QR Ordering -->
+        <div class="group relative bg-gradient-to-br from-blue-50 to-purple-50 p-8 rounded-2xl hover:shadow-2xl transition-all hover:-translate-y-1">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full opacity-10 blur-3xl group-hover:opacity-20 transition-opacity"></div>
+          <div class="relative">
+            <div class="w-14 h-14 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center mb-4">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">QR Code Ordering</h3>
+            <p class="text-gray-600">Contactless ordering via QR codes with multi-language support (DE, EN, TR, IT)</p>
+          </div>
+        </div>
+
+        <!-- Feature 2: Real-time Updates -->
+        <div class="group relative bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-2xl hover:shadow-2xl transition-all hover:-translate-y-1">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-green-500 rounded-full opacity-10 blur-3xl group-hover:opacity-20 transition-opacity"></div>
+          <div class="relative">
+            <div class="w-14 h-14 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl flex items-center justify-center mb-4">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Real-time Kitchen Display</h3>
+            <p class="text-gray-600">WebSocket-powered live updates for instant order notifications and status tracking</p>
+          </div>
+        </div>
+
+        <!-- Feature 3: Payment Splitting -->
+        <div class="group relative bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-2xl hover:shadow-2xl transition-all hover:-translate-y-1">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500 rounded-full opacity-10 blur-3xl group-hover:opacity-20 transition-opacity"></div>
+          <div class="relative">
+            <div class="w-14 h-14 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center mb-4">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Smart Payment Splitting</h3>
+            <p class="text-gray-600">Flexible payment options with Stripe integration for group dining experiences</p>
+          </div>
+        </div>
+
+        <!-- Feature 4: Analytics -->
+        <div class="group relative bg-gradient-to-br from-orange-50 to-amber-50 p-8 rounded-2xl hover:shadow-2xl transition-all hover:-translate-y-1">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-orange-500 rounded-full opacity-10 blur-3xl group-hover:opacity-20 transition-opacity"></div>
+          <div class="relative">
+            <div class="w-14 h-14 bg-gradient-to-br from-orange-600 to-amber-600 rounded-xl flex items-center justify-center mb-4">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Advanced Analytics</h3>
+            <p class="text-gray-600">Comprehensive sales dashboards with revenue tracking and performance insights</p>
+          </div>
+        </div>
+
+        <!-- Feature 5: QR Management -->
+        <div class="group relative bg-gradient-to-br from-indigo-50 to-blue-50 p-8 rounded-2xl hover:shadow-2xl transition-all hover:-translate-y-1">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500 rounded-full opacity-10 blur-3xl group-hover:opacity-20 transition-opacity"></div>
+          <div class="relative">
+            <div class="w-14 h-14 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-xl flex items-center justify-center mb-4">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">QR Code Generator</h3>
+            <p class="text-gray-600">Generate and download print-ready QR codes in PNG/SVG formats with bulk export</p>
+          </div>
+        </div>
+
+        <!-- Feature 6: Multi-language -->
+        <div class="group relative bg-gradient-to-br from-teal-50 to-cyan-50 p-8 rounded-2xl hover:shadow-2xl transition-all hover:-translate-y-1">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-teal-500 rounded-full opacity-10 blur-3xl group-hover:opacity-20 transition-opacity"></div>
+          <div class="relative">
+            <div class="w-14 h-14 bg-gradient-to-br from-teal-600 to-cyan-600 rounded-xl flex items-center justify-center mb-4">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Internationalization</h3>
+            <p class="text-gray-600">Full i18n support with 4 languages: German, English, Turkish, and Italian</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Links Section -->
+  <div class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-extrabold text-white mb-4">Get Started</h2>
+        <p class="text-xl text-gray-400">Access different parts of the system</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <%= link_to admin_dashboard_path, class: "group bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all hover:-translate-y-1" do %>
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-white">Analytics Dashboard</h3>
+          </div>
+          <p class="text-gray-400">View sales metrics, revenue trends, and order statistics</p>
+        <% end %>
+
+        <%= link_to admin_qr_codes_path, class: "group bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all hover:-translate-y-1" do %>
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-white">QR Code Manager</h3>
+          </div>
+          <p class="text-gray-400">Generate, download, and manage QR codes for all tables</p>
+        <% end %>
+
+        <%= link_to kitchen_path('gasthaus-bavaria'), class: "group bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all hover:-translate-y-1" do %>
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-orange-600 to-amber-600 rounded-xl flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-white">Kitchen Display</h3>
+          </div>
+          <p class="text-gray-400">Real-time order monitoring with live status updates</p>
+        <% end %>
+      </div>
+
+      <div class="mt-12 text-center">
+        <p class="text-gray-400 mb-4">Default Admin Credentials:</p>
+        <div class="inline-flex flex-col gap-2 bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-6">
+          <p class="text-white font-mono"><span class="text-gray-400">Email:</span> admin@restaurant.com</p>
+          <p class="text-white font-mono"><span class="text-gray-400">Password:</span> password123</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 border-t border-gray-800 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center text-gray-400">
+        <p>&copy; <%= Time.current.year %> QR Ordering System. Built with Ruby on Rails, Hotwire & Tailwind CSS.</p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<style>
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes blob {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+    }
+    33% {
+      transform: translate(30px, -50px) scale(1.1);
+    }
+    66% {
+      transform: translate(-20px, 20px) scale(0.9);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 0.4s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+</style>

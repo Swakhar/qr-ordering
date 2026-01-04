@@ -1,80 +1,98 @@
-<div class="min-h-screen bg-gray-50" data-controller="cart upsell" data-upsell-restaurant-slug-value="<%= @restaurant.slug %>" data-upsell-currency-value="<%= @restaurant.currency %>">
-  <!-- Header -->
-  <header class="sticky top-0 z-40 bg-white shadow-sm border-b border-gray-200">
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50" data-controller="cart upsell" data-upsell-restaurant-slug-value="<%= @restaurant.slug %>" data-upsell-currency-value="<%= @restaurant.currency %>">
+  <!-- Animated Background -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none opacity-30">
+    <div class="absolute -top-40 -right-40 w-80 h-80 bg-indigo-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
+    <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
+    <div class="absolute top-1/2 left-1/2 w-80 h-80 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
+  </div>
+
+  <!-- Modern Header with Glass Effect -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl shadow-lg border-b border-white/20">
     <div class="max-w-4xl mx-auto px-4 py-4">
       <div class="flex items-center justify-between">
-        <div>
-          <h1 class="text-2xl font-bold text-gray-900"><%= @restaurant.name %></h1>
-          <p class="text-sm text-gray-600"><%= t('menu.table') %> <%= @table.label || @table.code %></p>
+        <div class="animate-fade-in">
+          <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600"><%= @restaurant.name %></h1>
+          <div class="flex items-center gap-2 mt-1">
+            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+            </svg>
+            <p class="text-sm font-semibold text-gray-700"><%= t('menu.table') %> <%= @table.label || @table.code %></p>
+          </div>
         </div>
         
-        <!-- Language Switcher -->
-        <div class="flex gap-2">
-          <% I18n.available_locales.each do |locale| %>
-            <%= link_to locale.upcase, 
-                menu_path(@restaurant.slug, @table.code, locale: locale),
-                class: "px-3 py-1 rounded-lg text-sm font-medium transition-colors #{I18n.locale == locale ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}" %>
-          <% end %>
-        </div>
+        <!-- Enhanced Language Switcher -->
+        <%= render 'shared/language_switcher' %>
       </div>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="max-w-4xl mx-auto px-4 py-6 pb-32">
-    <h2 class="text-3xl font-bold text-gray-900 mb-6"><%= t('menu.title') %></h2>
+  <!-- Main Content with Modern Design -->
+  <main class="relative max-w-4xl mx-auto px-4 py-8 pb-40">
+    <div class="animate-fade-in-up">
+      <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-3"><%= t('menu.title') %></h2>
+      <p class="text-lg text-gray-600 mb-8">Discover our delicious selection</p>
+    </div>
 
     <!-- Menu Categories -->
-    <% @categories.each do |category| %>
-      <section class="mb-8">
-        <h3 class="text-2xl font-semibold text-gray-800 mb-4 pb-2 border-b-2 border-gray-300">
-          <%= category.name %>
-        </h3>
+    <% @categories.each_with_index do |category, index| %>
+      <section class="mb-12 animate-fade-in-up" style="animation-delay: <%= index * 0.1 %>s">
+        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-6 mb-6 shadow-lg">
+          <h3 class="text-3xl font-extrabold text-white flex items-center gap-3">
+            <span class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-lg">
+              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+              </svg>
+            </span>
+            <%= category.name %>
+          </h3>
+        </div>
 
         <div class="space-y-4">
           <% category.menu_items.where(is_active: true).each do |item| %>
-            <article class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4">
-              <div class="flex gap-4">
+            <article class="group bg-white/90 backdrop-blur-lg rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border border-white/50 hover:scale-[1.02] hover:-translate-y-1">
+              <div class="flex gap-4 p-5">
                 <!-- Item Image -->
                 <% if item.image_url.present? %>
                   <div class="flex-shrink-0">
                     <%= image_tag item.image_url, 
                         alt: item.name,
-                        class: "w-24 h-24 object-cover rounded-lg",
+                        class: "w-28 h-28 object-cover rounded-xl ring-4 ring-white/50 group-hover:ring-indigo-300 transition-all",
                         loading: "lazy" %>
                   </div>
                 <% end %>
 
                 <!-- Item Details -->
                 <div class="flex-grow">
-                  <div class="flex items-start justify-between mb-2">
+                  <div class="flex items-start justify-between mb-3">
                     <div class="flex-grow">
-                      <h4 class="text-lg font-semibold text-gray-900" 
+                      <h4 class="text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors" 
                           data-item-name="<%= item.id %>" 
                           data-name="<%= item.name %>">
                         <%= item.name %>
                       </h4>
                       
                       <% if item.description.present? %>
-                        <p class="text-sm text-gray-600 mt-1"><%= item.description %></p>
+                        <p class="text-gray-700 mt-2 leading-relaxed"><%= item.description %></p>
                       <% end %>
                     </div>
 
                     <div class="flex-shrink-0 ml-4">
-                      <span class="text-xl font-bold text-gray-900"
-                            data-item-price="<%= item.id %>" 
-                            data-cents="<%= item.price_cents %>">
-                        <%= number_to_currency(item.price_cents/100.0, unit: @restaurant.currency == "EUR" ? "€" : @restaurant.currency, format: "%n %u") %>
-                      </span>
+                      <div class="text-right">
+                        <span class="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600"
+                              data-item-price="<%= item.id %>" 
+                              data-cents="<%= item.price_cents %>">
+                          <%= number_to_currency(item.price_cents/100.0, unit: @restaurant.currency == "EUR" ? "€" : @restaurant.currency, format: "%n %u") %>
+                        </span>
+                      </div>
                     </div>
                   </div>
 
                   <!-- Allergens -->
                   <% if item.allergens.present? && item.allergens.any? %>
-                    <div class="flex flex-wrap gap-1 mb-3">
-                      <span class="text-xs text-gray-500 mr-1"><%= t('menu.allergens') %>:</span>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                      <span class="text-xs text-gray-500 font-medium"><%= t('menu.allergens') %>:</span>
                       <% item.allergens.each do |allergen| %>
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-amber-100 to-orange-100 text-amber-800 border border-amber-200">
                           <%= t("allergens.#{allergen}", default: allergen.titleize) %>
                         </span>
                       <% end %>
@@ -85,11 +103,14 @@
                   <button 
                     data-action="click->cart#add" 
                     data-cart-item-id-param="<%= item.id %>"
-                    class="inline-flex items-center px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 active:bg-gray-700 transition-colors">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                    </svg>
-                    <%= t('menu.add_to_cart') %>
+                    class="mt-4 group/btn relative inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-bold rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all hover:scale-105 shadow-lg hover:shadow-xl overflow-hidden">
+                    <span class="relative z-10 flex items-center gap-2">
+                      <svg class="w-5 h-5 group-hover/btn:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                      </svg>
+                      <%= t('menu.add_to_cart') %>
+                    </span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0 group-hover/btn:opacity-100 transition-opacity"></div>
                   </button>
                 </div>
               </div>
@@ -100,64 +121,83 @@
     <% end %>
   </main>
 
-  <!-- Fixed Cart Footer -->
-  <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
-    <div class="max-w-4xl mx-auto px-4 py-4">
+  <!-- Modern Fixed Cart Footer with Glass Effect -->
+  <div class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-white/20 shadow-2xl z-50">
+    <div class="max-w-4xl mx-auto px-4 py-5">
       <!-- Cart Header -->
-      <div class="flex items-center justify-between mb-3">
-        <h3 class="text-lg font-semibold text-gray-900">
-          <%= t('menu.cart') %>
-          <span class="text-sm font-normal text-gray-600 ml-2" data-cart-target="itemCount"></span>
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-bold flex items-center gap-3">
+          <div class="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+            </svg>
+          </div>
+          <span class="text-gray-900"><%= t('menu.cart') %></span>
+          <span class="text-base font-normal text-gray-600" data-cart-target="itemCount"></span>
         </h3>
         <button 
           data-action="click->cart#toggleCart"
           data-cart-target="toggleButton"
-          class="text-gray-600 hover:text-gray-900 transition-colors">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-xl flex items-center justify-center transition-all hover:scale-110">
+          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
           </svg>
         </button>
       </div>
 
       <!-- Cart Items (Collapsible) -->
-      <div data-cart-target="cartItems" class="hidden mb-3 max-h-48 overflow-y-auto">
+      <div data-cart-target="cartItems" class="hidden mb-4 max-h-56 overflow-y-auto rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 p-3">
         <div data-cart-target="lines" class="space-y-2">
-          <p class="text-sm text-gray-500 italic"><%= t('menu.cart_empty') %></p>
+          <p class="text-sm text-gray-500 italic text-center py-4"><%= t('menu.cart_empty') %></p>
         </div>
       </div>
 
-      <!-- Upsell Suggestions -->
-      <div data-upsell-target="container" class="hidden mb-3 pb-3 border-b border-gray-200">
-        <h4 class="text-sm font-semibold text-gray-700 mb-2"><%= t('menu.upsell_title') %></h4>
+      <!-- Upsell Suggestions with Modern Design -->
+      <div data-upsell-target="container" class="hidden mb-4 p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl border-2 border-purple-200">
+        <h4 class="text-sm font-bold text-purple-900 mb-3 flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+          </svg>
+          <%= t('menu.upsell_title') %>
+        </h4>
         <div data-upsell-target="items" class="grid grid-cols-1 gap-2"></div>
       </div>
 
       <!-- Cart Total & Checkout -->
-      <div class="flex items-center justify-between gap-4">
-        <div class="flex items-baseline gap-2">
-          <span class="text-sm text-gray-600"><%= t('menu.total') %>:</span>
-          <span data-cart-target="total" class="text-2xl font-bold text-gray-900">€0,00</span>
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-baseline gap-3">
+          <span class="text-base text-gray-600 font-medium"><%= t('menu.total') %>:</span>
+          <span data-cart-target="total" class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">€0,00</span>
         </div>
 
-        <%= form_with url: create_order_path(@restaurant.slug, @table.code), method: :post, data: { turbo: true, cart_target: "form", action: "submit->cart#checkout" }, class: "flex-shrink-0" do |f| %>
+        <%= form_with url: create_order_path(@restaurant.slug, @table.code), method: :post, data: { turbo: true, cart_target: "form", action: "submit->cart#checkout" }, class: "flex-shrink-0 w-full sm:w-auto" do |f| %>
           <%= hidden_field_tag :items_json, "", data: { cart_target: "payload" } %>
           <%= submit_tag t('menu.order_now'), 
-              class: "px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 active:bg-green-800 transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed",
+              class: "w-full sm:w-auto group relative px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-lg font-extrabold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all hover:scale-105 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 overflow-hidden",
               disabled: true,
-              data: { cart_target: "submitButton" } %>
+              data: { cart_target: "submitButton" } do %>
+            <span class="relative z-10 flex items-center justify-center gap-2">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              </svg>
+              <%= t('menu.order_now') %>
+            </span>
+            <div class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-green-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <% end %>
         <% end %>
       </div>
     </div>
   </div>
 
-  <!-- Toast Notification -->
-  <div data-cart-target="toast" 
-       class="hidden fixed top-20 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in">
-    <div class="flex items-center gap-2">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-      </svg>
-      <span data-cart-target="toastMessage"><%= t('menu.item_added') %></span>
+  <!-- Modern Toast Notification -->\n  <div data-cart-target="toast" 
+       class="hidden fixed top-24 right-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-8 py-4 rounded-2xl shadow-2xl z-50 animate-slide-in-right border-2 border-green-400">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-lg">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+      <span class="font-bold text-lg" data-cart-target="toastMessage"><%= t('menu.item_added') %></span>
     </div>
   </div>
 </div>

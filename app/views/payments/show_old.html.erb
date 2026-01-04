@@ -1,0 +1,173 @@
+<%# include Stripe.js %>
+<script src="https://js.stripe.com/v3/"></script>
+
+<div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+  <h2 class="text-3xl font-bold text-gray-900 mb-6">Payment for Order #<%= @order.id %></h2>
+  
+  <!-- Order Summary -->
+  <div class="bg-gray-50 rounded-lg p-4 mb-6">
+    <div class="flex justify-between items-center mb-2">
+      <span class="text-gray-700 font-medium">Total Amount:</span>
+      <span class="text-2xl font-bold text-gray-900"><%= number_to_currency(@order.total_cents/100.0, unit: "€") %></span>
+    </div>
+    
+    <% if @order.paid_cents > 0 %>
+      <div class="border-t border-gray-200 pt-2 mt-2">
+        <div class="flex justify-between items-center text-sm mb-1">
+          <span class="text-gray-600">Already Paid:</span>
+          <span class="font-medium text-green-600"><%= number_to_currency(@order.paid_cents/100.0, unit: "€") %></span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-gray-700 font-medium">Remaining:</span>
+          <span class="text-xl font-bold text-orange-600"><%= number_to_currency(@order.remaining_balance/100.0, unit: "€") %></span>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Payment Split Options -->
+  <div class="mb-6">
+    <h3 class="text-lg font-semibold text-gray-900 mb-3">Payment Options</h3>
+    
+    <div class="space-y-2">
+      <!-- Pay Full Amount -->
+      <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+        <input type="radio" name="split_option" value="full" checked class="mr-3" onchange="updatePaymentAmount()">
+        <div class="flex-grow">
+          <span class="font-medium text-gray-900">Pay Full Amount</span>
+          <p class="text-sm text-gray-600"><%= number_to_currency(@order.remaining_balance/100.0, unit: "€") %></p>
+        </div>
+      </label>
+
+      <!-- Pay Half -->
+      <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+        <input type="radio" name="split_option" value="half" class="mr-3" onchange="updatePaymentAmount()">
+        <div class="flex-grow">
+          <span class="font-medium text-gray-900">Pay Half (Split Bill)</span>
+          <p class="text-sm text-gray-600"><%= number_to_currency((@order.remaining_balance/2.0)/100.0, unit: "€") %></p>
+        </div>
+      </label>
+
+      <!-- Custom Amount -->
+      <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+        <input type="radio" name="split_option" value="custom" class="mr-3" onchange="updatePaymentAmount()">
+        <div class="flex-grow">
+          <span class="font-medium text-gray-900">Custom Amount</span>
+          <div class="mt-2" id="custom-amount-input" style="display:none;">
+            <div class="flex items-center gap-2">
+              <input type="number" 
+                     id="custom_amount" 
+                     min="1" 
+                     max="<%= @order.remaining_balance %>" 
+                     step="1"
+                     placeholder="Enter amount in cents"
+                     class="flex-grow px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                     oninput="updatePaymentAmount()">
+              <span class="text-gray-600">cents</span>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Max: <%= number_to_currency(@order.remaining_balance/100.0, unit: "€") %></p>
+          </div>
+        </div>
+      </label>
+    </div>
+
+    <!-- Amount to Pay Display -->
+    <div class="mt-4 p-4 bg-blue-50 rounded-lg">
+      <div class="flex justify-between items-center">
+        <span class="text-gray-700 font-medium">You will pay:</span>
+        <span id="amount-display" class="text-2xl font-bold text-blue-600">
+          <%= number_to_currency(@order.remaining_balance/100.0, unit: "€") %>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Element -->
+  <div id="payment-element" class="mb-6"></div>
+  
+  <button id="pay-button" class="w-full py-4 bg-green-600 text-white font-bold text-lg rounded-lg hover:bg-green-700 active:bg-green-800 transition-colors shadow-md">
+    Pay Now
+  </button>
+
+  <p class="text-sm text-gray-500 text-center mt-4">Secure payment powered by Stripe</p>
+</div>
+
+<script type="module">
+  const stripe = Stripe("<%= @publishable_key %>")
+  const orderId = "<%= @order.id %>"
+  const restaurant = "<%= @restaurant_slug || @order.restaurant.slug %>"
+  const remainingBalance = parseInt("<%= @order.remaining_balance %>")
+  
+  let currentAmount = remainingBalance
+  let elements = null
+  let clientSecret = null
+
+  window.updatePaymentAmount = function() {
+    const splitOption = document.querySelector('input[name="split_option"]:checked').value
+    const customInput = document.getElementById('custom-amount-input')
+    const amountDisplay = document.getElementById('amount-display')
+    
+    // Show/hide custom input
+    customInput.style.display = splitOption === 'custom' ? 'block' : 'none'
+    
+    // Calculate amount
+    if (splitOption === 'full') {
+      currentAmount = remainingBalance
+    } else if (splitOption === 'half') {
+      currentAmount = Math.floor(remainingBalance / 2)
+    } else if (splitOption === 'custom') {
+      const customValue = parseInt(document.getElementById('custom_amount').value) || remainingBalance
+      currentAmount = Math.min(customValue, remainingBalance)
+    }
+    
+    // Update display
+    amountDisplay.textContent = new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency: 'EUR'
+    }).format(currentAmount / 100)
+    
+    // Reinitialize payment element with new amount
+    initPayment()
+  }
+
+  async function initPayment() {
+    const res = await fetch(`/r/${restaurant}/orders/${orderId}/payment_intent`, { 
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ amount_cents: currentAmount })
+    })
+    const data = await res.json()
+    clientSecret = data.client_secret
+
+    // Remove old elements if exists
+    if (elements) {
+      elements.unmount()
+    }
+
+    elements = stripe.elements({ clientSecret: clientSecret })
+    const paymentElement = elements.create("payment")
+    paymentElement.mount("#payment-element")
+  }
+
+  document.getElementById("pay-button").addEventListener("click", async () => {
+    const button = document.getElementById("pay-button")
+    button.disabled = true
+    button.textContent = "Processing..."
+    
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: { return_url: `${window.location.origin}/kitchen/${restaurant}` }
+    })
+    
+    if (error) {
+      alert(error.message)
+      button.disabled = false
+      button.textContent = "Pay Now"
+    }
+  })
+
+  // Initialize on page load
+  initPayment()
+</script>

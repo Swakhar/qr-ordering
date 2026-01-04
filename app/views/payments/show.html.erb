@@ -1,95 +1,201 @@
 <%# include Stripe.js %>
 <script src="https://js.stripe.com/v3/"></script>
 
-<div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-  <h2 class="text-3xl font-bold text-gray-900 mb-6">Payment for Order #<%= @order.id %></h2>
-  
-  <!-- Order Summary -->
-  <div class="bg-gray-50 rounded-lg p-4 mb-6">
-    <div class="flex justify-between items-center mb-2">
-      <span class="text-gray-700 font-medium">Total Amount:</span>
-      <span class="text-2xl font-bold text-gray-900"><%= number_to_currency(@order.total_cents/100.0, unit: "€") %></span>
-    </div>
-    
-    <% if @order.paid_cents > 0 %>
-      <div class="border-t border-gray-200 pt-2 mt-2">
-        <div class="flex justify-between items-center text-sm mb-1">
-          <span class="text-gray-600">Already Paid:</span>
-          <span class="font-medium text-green-600"><%= number_to_currency(@order.paid_cents/100.0, unit: "€") %></span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-gray-700 font-medium">Remaining:</span>
-          <span class="text-xl font-bold text-orange-600"><%= number_to_currency(@order.remaining_balance/100.0, unit: "€") %></span>
-        </div>
-      </div>
-    <% end %>
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12 px-4">
+  <!-- Animated Background -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none opacity-20">
+    <div class="absolute top-20 right-20 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
+    <div class="absolute bottom-20 left-20 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
+    <div class="absolute top-1/2 left-1/2 w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
   </div>
 
-  <!-- Payment Split Options -->
-  <div class="mb-6">
-    <h3 class="text-lg font-semibold text-gray-900 mb-3">Payment Options</h3>
-    
-    <div class="space-y-2">
-      <!-- Pay Full Amount -->
-      <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
-        <input type="radio" name="split_option" value="full" checked class="mr-3" onchange="updatePaymentAmount()">
-        <div class="flex-grow">
-          <span class="font-medium text-gray-900">Pay Full Amount</span>
-          <p class="text-sm text-gray-600"><%= number_to_currency(@order.remaining_balance/100.0, unit: "€") %></p>
-        </div>
-      </label>
+  <div class="relative max-w-3xl mx-auto">
+    <!-- Header Card -->
+    <div class="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden mb-8 animate-fade-in-down">
+      <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-6">
+        <h2 class="text-4xl font-extrabold text-white flex items-center gap-3">
+          <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+          </svg>
+          Payment for Order #<%= @order.id %>
+        </h2>
+        <p class="text-blue-100 mt-2">Secure payment powered by Stripe</p>
+      </div>
+    </div>
 
-      <!-- Pay Half -->
-      <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
-        <input type="radio" name="split_option" value="half" class="mr-3" onchange="updatePaymentAmount()">
-        <div class="flex-grow">
-          <span class="font-medium text-gray-900">Pay Half (Split Bill)</span>
-          <p class="text-sm text-gray-600"><%= number_to_currency((@order.remaining_balance/2.0)/100.0, unit: "€") %></p>
+    <!-- Order Summary Card -->
+    <div class="bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 p-8 mb-8 animate-fade-in-up animation-delay-200">
+      <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+        <div class="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+          </svg>
         </div>
-      </label>
-
-      <!-- Custom Amount -->
-      <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
-        <input type="radio" name="split_option" value="custom" class="mr-3" onchange="updatePaymentAmount()">
-        <div class="flex-grow">
-          <span class="font-medium text-gray-900">Custom Amount</span>
-          <div class="mt-2" id="custom-amount-input" style="display:none;">
-            <div class="flex items-center gap-2">
-              <input type="number" 
-                     id="custom_amount" 
-                     min="1" 
-                     max="<%= @order.remaining_balance %>" 
-                     step="1"
-                     placeholder="Enter amount in cents"
-                     class="flex-grow px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                     oninput="updatePaymentAmount()">
-              <span class="text-gray-600">cents</span>
+        Order Summary
+      </h3>
+      
+      <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6">
+        <div class="flex justify-between items-center mb-4">
+          <span class="text-lg text-gray-700 font-semibold">Total Amount:</span>
+          <span class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+            <%= number_to_currency(@order.total_cents/100.0, unit: "€") %>
+          </span>
+        </div>
+        
+        <% if @order.paid_cents > 0 %>
+          <div class="border-t-2 border-gray-200 pt-4 mt-4 space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600 flex items-center gap-2">
+                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                Already Paid:
+              </span>
+              <span class="text-xl font-bold text-green-600"><%= number_to_currency(@order.paid_cents/100.0, unit: "€") %></span>
             </div>
-            <p class="text-xs text-gray-500 mt-1">Max: <%= number_to_currency(@order.remaining_balance/100.0, unit: "€") %></p>
+            <div class="flex justify-between items-center bg-white rounded-xl p-4 shadow-sm">
+              <span class="text-gray-900 font-bold text-lg">Remaining:</span>
+              <span class="text-2xl font-extrabold text-orange-600"><%= number_to_currency(@order.remaining_balance/100.0, unit: "€") %></span>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="mt-4">
+              <div class="flex justify-between text-sm text-gray-600 mb-2">
+                <span>Payment Progress</span>
+                <span><%= (((@order.paid_cents.to_f / @order.total_cents) * 100).round) %>%</span>
+              </div>
+              <div class="h-4 bg-gray-200 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-green-500 to-emerald-500 rounded-full transition-all duration-500"
+                     style="width: <%= ((@order.paid_cents.to_f / @order.total_cents) * 100).round %>%"></div>
+              </div>
+            </div>
           </div>
-        </div>
-      </label>
-    </div>
-
-    <!-- Amount to Pay Display -->
-    <div class="mt-4 p-4 bg-blue-50 rounded-lg">
-      <div class="flex justify-between items-center">
-        <span class="text-gray-700 font-medium">You will pay:</span>
-        <span id="amount-display" class="text-2xl font-bold text-blue-600">
-          <%= number_to_currency(@order.remaining_balance/100.0, unit: "€") %>
-        </span>
+        <% end %>
       </div>
     </div>
+
+    <!-- Payment Options Card -->
+    <div class="bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 p-8 mb-8 animate-fade-in-up animation-delay-400">
+      <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+        <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        Payment Options
+      </h3>
+      
+      <div class="space-y-4">
+        <!-- Pay Full Amount -->
+        <label class="group relative flex items-center p-5 bg-gradient-to-br from-blue-50 to-purple-50 border-3 border-blue-200 rounded-2xl cursor-pointer hover:border-blue-400 hover:shadow-lg transition-all">
+          <input type="radio" name="split_option" value="full" checked class="mr-4 w-5 h-5 text-blue-600" onchange="updatePaymentAmount()">
+          <div class="flex-grow">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="font-bold text-gray-900 text-lg">Pay Full Amount</span>
+              <span class="px-2 py-0.5 bg-blue-600 text-white text-xs font-bold rounded-full">RECOMMENDED</span>
+            </div>
+            <p class="text-2xl font-extrabold text-blue-600"><%= number_to_currency(@order.remaining_balance/100.0, unit: "€") %></p>
+          </div>
+          <svg class="w-6 h-6 text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+        </label>
+
+        <!-- Pay Half -->
+        <label class="group relative flex items-center p-5 bg-gradient-to-br from-purple-50 to-pink-50 border-3 border-purple-200 rounded-2xl cursor-pointer hover:border-purple-400 hover:shadow-lg transition-all">
+          <input type="radio" name="split_option" value="half" class="mr-4 w-5 h-5 text-purple-600" onchange="updatePaymentAmount()">
+          <div class="flex-grow">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="font-bold text-gray-900 text-lg">Split Bill (Half)</span>
+              <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+            </div>
+            <p class="text-2xl font-extrabold text-purple-600"><%= number_to_currency((@order.remaining_balance/2.0)/100.0, unit: "€") %></p>
+          </div>
+          <svg class="w-6 h-6 text-purple-600 opacity-0 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+        </label>
+
+        <!-- Custom Amount -->
+        <label class="group relative flex items-start p-5 bg-gradient-to-br from-orange-50 to-amber-50 border-3 border-orange-200 rounded-2xl cursor-pointer hover:border-orange-400 hover:shadow-lg transition-all">
+          <input type="radio" name="split_option" value="custom" class="mr-4 mt-1 w-5 h-5 text-orange-600" onchange="updatePaymentAmount()">
+          <div class="flex-grow">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="font-bold text-gray-900 text-lg">Custom Amount</span>
+              <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+              </svg>
+            </div>
+            <div id="custom-amount-input" style="display:none;" class="mt-3">
+              <div class="flex items-center gap-3 bg-white rounded-xl p-4 border-2 border-orange-300 shadow-inner">
+                <span class="text-2xl font-bold text-orange-600">€</span>
+                <input type="number" 
+                       id="custom_amount_euros"
+                       min="0.01"
+                       max="<%= @order.remaining_balance / 100.0 %>"
+                       step="0.01"
+                       placeholder="Enter amount"
+                       class="flex-grow text-2xl font-bold text-gray-900 bg-transparent border-none focus:outline-none focus:ring-0"
+                       oninput="updateCustomAmount()">
+              </div>
+              <p class="text-sm text-gray-600 mt-2 flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Maximum: <%= number_to_currency(@order.remaining_balance/100.0, unit: "€") %>
+              </p>
+            </div>
+          </div>
+        </label>
+      </div>
+
+      <!-- Amount to Pay Display -->
+      <div class="mt-8 p-6 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl shadow-xl">
+        <div class="flex justify-between items-center">
+          <span class="text-white font-bold text-xl">You will pay:</span>
+          <span id="amount-display" class="text-4xl font-extrabold text-white">
+            <%= number_to_currency(@order.remaining_balance/100.0, unit: "€") %>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Element Card -->
+    <div class="bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 p-8 mb-8 animate-fade-in-up animation-delay-600">
+      <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+        <div class="w-12 h-12 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl flex items-center justify-center">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+          </svg>
+        </div>
+        Payment Details
+      </h3>
+      <div id="payment-element" class="min-h-[200px]"></div>
+    </div>
+    
+    <!-- Pay Button -->
+    <button id="pay-button" 
+            class="w-full group relative py-6 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-xl font-extrabold rounded-2xl hover:from-green-700 hover:to-emerald-700 transition-all hover:scale-105 shadow-2xl hover:shadow-3xl overflow-hidden animate-fade-in-up animation-delay-800">
+      <span class="relative z-10 flex items-center justify-center gap-3">
+        <svg class="w-7 h-7 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        Complete Payment
+      </span>
+      <div class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-green-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+    </button>
+
+    <!-- Security Badge -->
+    <div class="mt-8 flex items-center justify-center gap-3 text-gray-600 animate-fade-in">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+      </svg>
+      <span class="font-medium">Secure payment powered by</span>
+      <span class="font-bold text-indigo-600">Stripe</span>
+    </div>
   </div>
-
-  <!-- Payment Element -->
-  <div id="payment-element" class="mb-6"></div>
-  
-  <button id="pay-button" class="w-full py-4 bg-green-600 text-white font-bold text-lg rounded-lg hover:bg-green-700 active:bg-green-800 transition-colors shadow-md">
-    Pay Now
-  </button>
-
-  <p class="text-sm text-gray-500 text-center mt-4">Secure payment powered by Stripe</p>
 </div>
 
 <script type="module">
@@ -102,51 +208,68 @@
   let elements = null
   let clientSecret = null
 
+  window.updateCustomAmount = function() {
+    const eurosInput = document.getElementById('custom_amount_euros')
+    const euros = parseFloat(eurosInput.value) || 0
+    const cents = Math.round(euros * 100)
+    currentAmount = Math.min(cents, remainingBalance)
+    updateDisplay()
+  }
+
   window.updatePaymentAmount = function() {
     const splitOption = document.querySelector('input[name="split_option"]:checked').value
     const customInput = document.getElementById('custom-amount-input')
     const amountDisplay = document.getElementById('amount-display')
     
-    // Show/hide custom input
     customInput.style.display = splitOption === 'custom' ? 'block' : 'none'
     
-    // Calculate amount
     if (splitOption === 'full') {
       currentAmount = remainingBalance
     } else if (splitOption === 'half') {
       currentAmount = Math.floor(remainingBalance / 2)
     } else if (splitOption === 'custom') {
-      const customValue = parseInt(document.getElementById('custom_amount').value) || remainingBalance
-      currentAmount = Math.min(customValue, remainingBalance)
+      const eurosInput = document.getElementById('custom_amount_euros')
+      const euros = parseFloat(eurosInput.value) || (remainingBalance / 100.0)
+      currentAmount = Math.min(Math.round(euros * 100), remainingBalance)
     }
     
-    // Update display
+    updateDisplay()
+    initPayment()
+  }
+
+  function updateDisplay() {
+    const amountDisplay = document.getElementById('amount-display')
     amountDisplay.textContent = new Intl.NumberFormat('de-DE', {
       style: 'currency',
       currency: 'EUR'
     }).format(currentAmount / 100)
-    
-    // Reinitialize payment element with new amount
-    initPayment()
   }
 
   async function initPayment() {
     const res = await fetch(`/r/${restaurant}/orders/${orderId}/payment_intent`, { 
       method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ amount_cents: currentAmount })
     })
     const data = await res.json()
     clientSecret = data.client_secret
 
-    // Remove old elements if exists
-    if (elements) {
-      elements.unmount()
-    }
+    if (elements) elements.unmount()
 
-    elements = stripe.elements({ clientSecret: clientSecret })
+    elements = stripe.elements({ 
+      clientSecret: clientSecret,
+      appearance: {
+        theme: 'stripe',
+        variables: {
+          colorPrimary: '#6366f1',
+          colorBackground: '#ffffff',
+          colorText: '#1f2937',
+          colorDanger: '#ef4444',
+          fontFamily: 'system-ui, sans-serif',
+          borderRadius: '12px',
+        }
+      }
+    })
     const paymentElement = elements.create("payment")
     paymentElement.mount("#payment-element")
   }
@@ -154,7 +277,7 @@
   document.getElementById("pay-button").addEventListener("click", async () => {
     const button = document.getElementById("pay-button")
     button.disabled = true
-    button.textContent = "Processing..."
+    button.innerHTML = '<span class="flex items-center justify-center gap-2"><svg class="w-6 h-6 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Processing...</span>'
     
     const { error } = await stripe.confirmPayment({
       elements,
@@ -164,10 +287,9 @@
     if (error) {
       alert(error.message)
       button.disabled = false
-      button.textContent = "Pay Now"
+      button.innerHTML = '<span class="flex items-center justify-center gap-3"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Complete Payment</span>'
     }
   })
 
-  // Initialize on page load
   initPayment()
 </script>

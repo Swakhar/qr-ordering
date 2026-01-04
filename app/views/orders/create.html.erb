@@ -1,4 +1,74 @@
-<div>
-  <h1 class="font-bold text-4xl">Orders#create</h1>
-  <p>Find me in app/views/orders/create.html.erb</p>
+<div class="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center p-4">
+  <div class="max-w-md w-full">
+    <!-- Success Animation Card -->
+    <div class="bg-white rounded-2xl shadow-2xl p-8 text-center animate-scale-in">
+      <!-- Success Icon with Checkmark -->
+      <div class="mx-auto w-24 h-24 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-6 animate-bounce">
+        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+        </svg>
+      </div>
+
+      <!-- Success Message -->
+      <h1 class="text-3xl font-bold text-gray-900 mb-3">Order Placed Successfully!</h1>
+      <p class="text-lg text-gray-600 mb-8">
+        Your order has been sent to the kitchen. You'll receive your delicious meal soon!
+      </p>
+
+      <!-- Order Details -->
+      <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 mb-8 text-left">
+        <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">What's Next?</h2>
+        <div class="space-y-4">
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+              <span class="text-blue-600 font-bold text-sm">1</span>
+            </div>
+            <div>
+              <p class="font-medium text-gray-900">Your order is being prepared</p>
+              <p class="text-sm text-gray-600">Our kitchen is working on your order</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+              <span class="text-purple-600 font-bold text-sm">2</span>
+            </div>
+            <div>
+              <p class="font-medium text-gray-900">We'll bring it to your table</p>
+              <p class="text-sm text-gray-600">Sit back and relax while we prepare your meal</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+              <span class="text-green-600 font-bold text-sm">3</span>
+            </div>
+            <div>
+              <p class="font-medium text-gray-900">When ready to pay</p>
+              <p class="text-sm text-gray-600">Use the payment link we've shared with your table</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-3">
+        <%= button_tag "Order More Items", 
+            onclick: "window.history.back()",
+            class: "w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all hover:scale-105 shadow-lg" %>
+        
+        <p class="text-sm text-gray-500">Want to add more to your order? Go back to the menu</p>
+      </div>
+    </div>
+
+    <!-- Decorative Elements -->
+    <div class="mt-8 text-center">
+      <p class="text-gray-600 flex items-center justify-center gap-2">
+        <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+        </svg>
+        <span class="font-medium">Thank you for your order!</span>
+      </p>
+    </div>
+  </div>
 </div>
