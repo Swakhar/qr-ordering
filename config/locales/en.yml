@@ -45,6 +45,43 @@ en:
     item_added: "Item added"
     order_success: "Order placed successfully!"
     
+  kitchen:
+    title: "Kitchen Display"
+    active_orders: "Active Orders"
+    no_orders: "No active orders"
+    new_orders_appear: "New orders will appear here automatically"
+    order: "Order"
+    items: "Items"
+    mark_ready: "Mark Ready"
+    complete: "Complete"
+    status:
+      open: "Open"
+      preparing: "Preparing"
+      ready: "Ready"
+      served: "Served"
+      paid: "Paid"
+      
+  payment:
+    title: "Payment"
+    amount_to_pay: "Amount to Pay"
+    pay_full: "Pay Full Amount"
+    pay_custom: "Pay Custom Amount"
+    enter_amount: "Enter amount"
+    processing: "Processing payment..."
+    success: "Payment successful!"
+    failed: "Payment failed"
+    
+  common:
+    back: "Back"
+    cancel: "Cancel"
+    confirm: "Confirm"
+    save: "Save"
+    delete: "Delete"
+    edit: "Edit"
+    new: "New"
+    search: "Search"
+    filter: "Filter"
+    
   allergens:
     gluten: "Gluten"
     dairy: "Dairy"

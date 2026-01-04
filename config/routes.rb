@@ -1,9 +1,23 @@
 Rails.application.routes.draw do
-  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   devise_for :staffs
+  
+  # Custom admin routes
   namespace :admin do
     resources :ingest, only: [:new, :create]
+    resources :qr_codes, only: [:index, :show] do
+      member do
+        get 'download'
+      end
+      collection do
+        get 'download_all'
+      end
+    end
+    get 'dashboard', to: 'dashboard#index', as: 'dashboard'
+    root to: 'dashboard#index'
   end
+  
+  # Rails Admin at different path
+  mount RailsAdmin::Engine => '/rails_admin', as: 'rails_admin'
 
   get "kitchen/index"
   get "payments/create_intent"
@@ -30,7 +44,7 @@ Rails.application.routes.draw do
   get "/kitchen/:restaurant_slug", to: "kitchen#index", as: :kitchen
   get "/kitchen/:restaurant_slug", to: "kitchen#index"
 
-  get "/qr/:restaurant_slug/:table_code.png", to: "qr#show"
+  get "/qr/:restaurant_slug/:table_code.png", to: "qr#show", as: :qr
   patch "/orders/:id/status", to: "kitchen#update", as: :order_status
 
   root "home#index"

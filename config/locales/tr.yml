@@ -1,4 +1,6 @@
 tr:
+  hello: "Merhaba dünya"
+  
   menu:
     title: "Menü"
     table: "Masa"
@@ -9,24 +11,59 @@ tr:
     add_to_cart: "Sepete ekle"
     quantity: "Miktar"
     allergens: "Alerjenler"
-    upsell_title: "Öneriler"
-    upsell_subtitle: "Bunlar da hoşunuza gidebilir"
+    upsell_title: "Bunlar da hoşunuza gidebilir"
+    upsell_subtitle: "Yemeğinizi tamamlayın"
     item_added: "Ürün eklendi"
-    order_success: "Sipariş başarıyla oluşturuldu!"
+    order_success: "Sipariş başarıyla verildi!"
+    
+  kitchen:
+    title: "Mutfak Ekranı"
+    active_orders: "Aktif Siparişler"
+    no_orders: "Aktif sipariş yok"
+    new_orders_appear: "Yeni siparişler otomatik olarak burada görünecek"
+    order: "Sipariş"
+    items: "Ürünler"
+    mark_ready: "Hazır Olarak İşaretle"
+    complete: "Tamamla"
+    status:
+      open: "Açık"
+      preparing: "Hazırlanıyor"
+      ready: "Hazır"
+      served: "Servis Edildi"
+      paid: "Ödendi"
+      
+  payment:
+    title: "Ödeme"
+    amount_to_pay: "Ödenecek Tutar"
+    pay_full: "Tam Tutarı Öde"
+    pay_custom: "Özel Tutar Öde"
+    enter_amount: "Tutar girin"
+    processing: "Ödeme işleniyor..."
+    success: "Ödeme başarılı!"
+    failed: "Ödeme başarısız"
+    
+  common:
+    back: "Geri"
+    cancel: "İptal"
+    confirm: "Onayla"
+    save: "Kaydet"
+    delete: "Sil"
+    edit: "Düzenle"
+    new: "Yeni"
+    search: "Ara"
+    filter: "Filtrele"
     
   allergens:
     gluten: "Gluten"
-    dairy: "Süt ürünleri"
+    dairy: "Süt Ürünleri"
     eggs: "Yumurta"
     fish: "Balık"
+    peanuts: "Yer Fıstığı"
+    soybeans: "Soya Fasulyesi"
     nuts: "Fındık"
-    soy: "Soya"
-    shellfish: "Kabuklu deniz ürünleri"
+    celery: "Kereviz"
+    mustard: "Hardal"
     sesame: "Susam"
-    
-  categories:
-    appetizers: "Mezeler"
-    mains: "Ana yemekler"
-    sides: "Yan yemekler"
-    drinks: "İçecekler"
-    desserts: "Tatlılar"
+    sulfites: "Sülfitler"
+    lupin: "Acı Bakla"
+    mollusks: "Yumuşakçalar"

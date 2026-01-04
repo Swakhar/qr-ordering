@@ -5,13 +5,16 @@ A modern QR-based restaurant ordering system built with Ruby on Rails. This appl
 ## Features
 
 - 🍽️ **Digital Menu** - Multi-language support (German, English, Turkish, Italian)
-- 🛒 **Order Management** - Real-time order tracking with Turbo Streams
+- 🛒 **Order Management** - Real-time order tracking with Turbo Streams & WebSockets
 - 💳 **Payment Splitting** - Stripe integration for flexible payment options
-- 📊 **Admin Dashboard** - Rails Admin panel for restaurant management
-- 👨‍🍳 **Kitchen Display** - Live order updates for kitchen staff
+- 📊 **Analytics Dashboard** - Sales metrics, revenue tracking, and order statistics
+- 🎨 **Admin Dashboard** - Beautiful analytics UI with charts and insights
+- 📱 **QR Code Generator** - Generate and download QR codes (PNG/SVG) for all tables
+- 👨‍🍳 **Kitchen Display** - Live order updates for kitchen staff with real-time broadcasts
 - 🏷️ **Allergen Info** - Display allergen information for menu items
-- 📱 **QR Codes** - Generate unique QR codes for each table
+- 🌍 **Internationalization** - Full i18n support for 4 languages with language switcher
 - 🔔 **AI Upselling** - Rule-based suggestion engine for complementary items
+- ⚡ **Real-time Updates** - Action Cable WebSocket broadcasts for instant updates
 
 ## Tech Stack
 
@@ -100,7 +103,10 @@ rails dartsass:watch
 The application will be available at:
 - **Customer Menu:** http://localhost:3007/r/gasthaus-bavaria/t/TBL001
 - **Admin Dashboard:** http://localhost:3007/admin
-- **Kitchen Display:** http://localhost:3007/kitchen
+- **Analytics Dashboard:** http://localhost:3007/admin/dashboard  
+- **QR Code Manager:** http://localhost:3007/admin/qr_codes
+- **Rails Admin:** http://localhost:3007/admin (legacy admin panel)
+- **Kitchen Display:** http://localhost:3007/kitchen/gasthaus-bavaria
 
 ## Default Credentials
 
@@ -117,6 +123,40 @@ The seed file creates:
 - 5 Menu Categories (Appetizers, Mains, Sides, Drinks, Desserts)
 - 19 Menu Items with German/English descriptions
 - 1 Admin staff account
+
+## Key Features Guide
+
+### Analytics Dashboard
+Access comprehensive sales analytics at `/admin/dashboard`:
+- Total revenue and order statistics
+- Average order value tracking
+- Daily revenue charts
+- Order status breakdowns
+- Top selling items
+- Recent orders overview
+- Date range filtering
+
+### QR Code Management
+Generate and manage QR codes at `/admin/qr_codes`:
+- Visual QR code preview for all tables
+- Download individual QR codes (PNG or SVG)
+- Bulk download all QR codes as ZIP
+- Print-ready formats with guidelines
+- Direct menu link testing
+
+### Multi-Language Support
+The system supports 4 languages: German (DE), English (EN), Turkish (TR), Italian (IT)
+- Default language: German
+- Switch languages by adding `?locale=en` to any URL
+- Language preference persists in session
+- Use the language switcher component: `<%= render 'shared/language_switcher' %>`
+
+### Real-Time Kitchen Display
+WebSocket-powered live updates:
+- New orders appear automatically
+- Status updates broadcast to all connected clients
+- Works for authenticated and unauthenticated users
+- Turbo Streams for instant UI updates
 
 ## Project Structure
 
@@ -146,9 +186,9 @@ db/
 - [x] Step 4: AI upsell suggestions (rule-based)
 - [x] Step 5: Payment splitting
 - [x] Step 6: Kitchen display with Turbo Streams
-- [ ] Step 7: Admin dashboard enhancements
-- [ ] Step 8: i18n implementation (DE, EN, TR, IT)
-- [ ] Step 9: QR code generation
+- [x] Step 7: Admin dashboard enhancements
+- [x] Step 8: i18n implementation (DE, EN, TR, IT)
+- [x] Step 9: QR code generation
 - [ ] Step 10: Stripe configuration
 - [ ] Step 11: Analytics dashboard
 - [ ] Step 12: UI/UX polish

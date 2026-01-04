@@ -1,0 +1,12 @@
+<div class="language-switcher flex gap-2">
+  <% I18n.available_locales.each do |locale| %>
+    <% if locale == I18n.locale %>
+      <span class="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm font-medium">
+        <%= locale.to_s.upcase %>
+      </span>
+    <% else %>
+      <%= link_to locale.to_s.upcase, url_for(locale: locale), 
+          class: "px-3 py-1 bg-gray-200 text-gray-700 hover:bg-gray-300 rounded-lg text-sm font-medium transition-colors" %>
+    <% end %>
+  <% end %>
+</div>

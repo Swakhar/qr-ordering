@@ -1,4 +1,6 @@
 it:
+  hello: "Ciao mondo"
+  
   menu:
     title: "Menu"
     table: "Tavolo"
@@ -9,24 +11,59 @@ it:
     add_to_cart: "Aggiungi al carrello"
     quantity: "Quantità"
     allergens: "Allergeni"
-    upsell_title: "Raccomandazioni"
-    upsell_subtitle: "Ti potrebbero piacere anche"
+    upsell_title: "Potrebbe piacerti anche"
+    upsell_subtitle: "Completa il tuo pasto"
     item_added: "Articolo aggiunto"
     order_success: "Ordine effettuato con successo!"
+    
+  kitchen:
+    title: "Display Cucina"
+    active_orders: "Ordini Attivi"
+    no_orders: "Nessun ordine attivo"
+    new_orders_appear: "I nuovi ordini appariranno qui automaticamente"
+    order: "Ordine"
+    items: "Articoli"
+    mark_ready: "Segna come Pronto"
+    complete: "Completa"
+    status:
+      open: "Aperto"
+      preparing: "In Preparazione"
+      ready: "Pronto"
+      served: "Servito"
+      paid: "Pagato"
+      
+  payment:
+    title: "Pagamento"
+    amount_to_pay: "Importo da Pagare"
+    pay_full: "Paga Importo Completo"
+    pay_custom: "Paga Importo Personalizzato"
+    enter_amount: "Inserisci importo"
+    processing: "Elaborazione pagamento..."
+    success: "Pagamento riuscito!"
+    failed: "Pagamento fallito"
+    
+  common:
+    back: "Indietro"
+    cancel: "Annulla"
+    confirm: "Conferma"
+    save: "Salva"
+    delete: "Elimina"
+    edit: "Modifica"
+    new: "Nuovo"
+    search: "Cerca"
+    filter: "Filtra"
     
   allergens:
     gluten: "Glutine"
     dairy: "Latticini"
     eggs: "Uova"
     fish: "Pesce"
+    peanuts: "Arachidi"
+    soybeans: "Soia"
     nuts: "Noci"
-    soy: "Soia"
-    shellfish: "Crostacei"
+    celery: "Sedano"
+    mustard: "Senape"
     sesame: "Sesamo"
-    
-  categories:
-    appetizers: "Antipasti"
-    mains: "Piatti principali"
-    sides: "Contorni"
-    drinks: "Bevande"
-    desserts: "Dolci"
+    sulfites: "Solfiti"
+    lupin: "Lupini"
+    mollusks: "Molluschi"
